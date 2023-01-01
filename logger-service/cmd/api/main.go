@@ -10,12 +10,13 @@ import (
 	"github.com/yushyn-andriy/authentication/data"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
+	"go.mongodb.org/mongo-driver/mongo/readpref"
 )
 
 const (
 	webPort  = "80"
 	rpcPort  = "5001"
-	mongoURl = "mongodb://mongo:27017"
+	mongoURl = "mongodb://mongo:27017/?ssl=false"
 	gRpcPort = "50001"
 )
 
@@ -68,10 +69,23 @@ func connectToMongo() (*mongo.Client, error) {
 			Password: "password",
 		},
 	)
+
+	/*
+		c, err := mongo.NewClient(options.Client().ApplyURI(mongoURl))
+		if err != nil {
+			log.Println("Error connections:", err)
+			return nil, err
+		}
+	*/
 	c, err := mongo.Connect(context.TODO(), clientOptions)
 	if err != nil {
 		log.Println("Error connections:", err)
 		return nil, err
+	}
+
+	// Ping the primary
+	if err := c.Ping(context.TODO(), readpref.Primary()); err != nil {
+		panic(err)
 	}
 
 	return c, nil
