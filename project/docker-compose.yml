@@ -40,3 +40,26 @@ services:
       POSTGRES_DB: users
     volumes:
       - ./db-data/postgres/:/var/lib/postgresql/data/
+  
+  logger-service:
+    build:
+      context: ./../logger-service/
+      dockerfile: ./../logger-service/logger-service.dockerfile
+    deploy:
+      mode: replicated
+      replicas: 1
+    restart: always
+    ports:
+      - "8082:80"
+
+  mongo:
+    image: "mongo:4.2.16-bionic"
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INIT_DB: logs
+      MONGO_INIT_ROOT_USERNAME: admin
+      MONGO_INIT_ROOT_PASSWORD: password
+    volumes:
+      - ./db-data/mongo/:/data/db
+    
