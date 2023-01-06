@@ -20,7 +20,5 @@
 # Go workspace file
 go.work
 
-
-brokerApp
-authApp
+*App
 project/db-data/

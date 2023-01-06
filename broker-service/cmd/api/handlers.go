@@ -90,7 +90,7 @@ func (app *Config) log(w http.ResponseWriter, a LogPayload) {
 	payload.Error = false
 	payload.Message = "Logged"
 	payload.Data = jsonFromService.Data
-
+ 
 	app.writeJson(w, http.StatusAccepted, payload)
 }
 
