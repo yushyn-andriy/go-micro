@@ -47,6 +47,16 @@ services:
     restart: always
     ports:
       - "8083:80"
+    environment:
+      MAIL_DOMAIN: localhost
+      MAIL_HOST: mailhog
+      MAIL_PORT: 1025
+      MAIL_ENCRYPTION: none
+      MAIL_USERNAME: ""
+      MAIL_PASSWORD: ""
+      FROM_NAME: Andiy
+      FROM_ADDRESS: yushyn.andriy@example.com
+
 
   mailhog:
     image: mailhog/mailhog:latest
