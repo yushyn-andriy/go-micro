@@ -57,6 +57,15 @@ services:
       FROM_NAME: Andiy
       FROM_ADDRESS: yushyn.andriy@example.com
 
+  listener-service:
+    build:
+      context: ./../listener-service/
+      dockerfile: ./../listener-service/listener-service.dockerfile
+    deploy:
+      mode: replicated
+      replicas: 1
+    restart: always
+
 
   mailhog:
     image: mailhog/mailhog:latest
