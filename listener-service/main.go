@@ -6,6 +6,7 @@ import (
 	"time"
 
 	amqp "github.com/rabbitmq/amqp091-go"
+	"github.com/yushyn-andriy/listener-service/event"
 )
 
 func main() {
@@ -16,7 +17,18 @@ func main() {
 	}
 	defer rabbitConn.Close()
 
-	log.Println("Connected to rabbitmq")
+	log.Println("Listening for and consuming RabbitMQ messages...")
+	consumer, err := event.NewConsumer(rabbitConn)
+	if err != nil {
+		log.Println(err)
+		os.Exit(1)
+	}
+
+	err = consumer.Listen([]string{"log.INFO", "log.WARNING", "log.WARNING"})
+	if err != nil {
+		log.Println("listening:", err)
+		os.Exit(1)
+	}
 }
 
 func connect() (*amqp.Connection, error) {
@@ -31,6 +43,7 @@ func connect() (*amqp.Connection, error) {
 			counts += 1
 
 		} else {
+			log.Println("Connected to rabbitmq")
 			connection = c
 			break
 		}
